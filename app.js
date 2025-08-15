@@ -23,11 +23,9 @@ const createTour = (req, res) => {};
 
 const getTour = (req, res) => {
   const tour = tours.find((el) => el.id === req.params.id * 1);
-  // console.log('Tour id: ', tour.id);
-  console.log('Params id: ', req.params.id * 1);
 
   if (!tour) {
-    res.status(404).json({
+    return res.status(404).json({
       status: 'fail',
       message: 'Invalid ID!',
     });
