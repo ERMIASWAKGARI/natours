@@ -64,8 +64,4 @@ This project is licensed under the ISC License.
 
 ```
 
----
-
-I can also **add sample API request/response examples** so your README doubles as documentation for testing in Postman or curl.
-Do you want me to make that version? It’ll make the repo look extra polished.
 ```
