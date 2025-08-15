@@ -3,6 +3,15 @@ const fs = require('fs');
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
+const checkId = (req, res, next, val) => {
+  if (req.params.id * 1 > tours.length - 1) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID!',
+    });
+  }
+  next();
+};
 
 const getAllTours = (req, res) => {
   res.status(200).json({
@@ -20,7 +29,7 @@ const createTour = (req, res) => {
   tours.push(newTour);
   fs.writeFile(
     `${__dirname}/../dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
+    JSON.stringify(tours, null, 2),
     (err) => {
       res.status(201).json({
         status: 'success',
@@ -33,13 +42,6 @@ const createTour = (req, res) => {
 const getTour = (req, res) => {
   const tour = tours.find((el) => el.id === req.params.id * 1);
 
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID!',
-    });
-  }
-
   res.status(200).json({
     status: 'success',
     data: {
@@ -49,22 +51,13 @@ const getTour = (req, res) => {
 };
 
 const updateTour = (req, res) => {
-  const id = req.params.id * 1;
+  const tour = tours.find((el) => el.id === req.params.id * 1);
 
-  const theTour = tours.find((el) => el.id === id);
-
-  if (!theTour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID!',
-    });
-  }
-
-  Object.assign(theTour, req.body);
+  Object.assign(tour, req.body);
 
   fs.writeFile(
     `${__dirname}/../dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
+    JSON.stringify(tours, null, 2),
     (err) => {
       if (err) {
         return res.status(500).json({
@@ -75,24 +68,15 @@ const updateTour = (req, res) => {
 
       res.status(201).json({
         status: 'success',
-        data: { theTour },
+        data: { tour },
       });
     }
   );
 };
 
 const deleteTour = (req, res) => {
-  const id = req.params.id * 1;
-
-  const index = tours.findIndex((el) => el.id === id);
+  const index = tours.findIndex((el) => el.id === req.params.id * 1);
   console.log(index);
-
-  if (index === -1) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID!',
-    });
-  }
 
   tours.splice(index, 1);
 
@@ -115,4 +99,11 @@ const deleteTour = (req, res) => {
   );
 };
 
-module.exports = { getAllTours, createTour, getTour, updateTour, deleteTour };
+module.exports = {
+  getAllTours,
+  createTour,
+  getTour,
+  updateTour,
+  deleteTour,
+  checkId,
+};
