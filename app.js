@@ -13,7 +13,4 @@ app.use('/api/v1/tours', tourRouter);
 
 app.use('/api/v1/users', userRouter);
 
-const port = 5000;
-app.listen(port, () => {
-  console.log(`App is listening on port: ${port}`);
-});
+module.exports = app;
