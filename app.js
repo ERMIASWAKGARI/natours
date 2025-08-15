@@ -1,0 +1,58 @@
+const fs = require('fs');
+const express = require('express');
+
+const app = express();
+
+app.use(express.json());
+
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+);
+
+const getAllTours = (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
+};
+
+const createTour = (req, res) => {};
+
+const getTour = (req, res) => {
+  const tour = tours.find((el) => el.id === req.params.id * 1);
+  // console.log('Tour id: ', tour.id);
+  console.log('Params id: ', req.params.id * 1);
+
+  if (!tour) {
+    res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID!',
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
+};
+
+const updateTour = (req, res) => {};
+
+const deleteTour = (req, res) => {};
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
+
+const port = 5000;
+app.listen(port, () => {
+  console.log(`App is listening on port: ${port}`);
+});
