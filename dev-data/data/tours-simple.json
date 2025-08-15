@@ -146,13 +146,13 @@
     "name": "The Park Camper",
     "duration": 10,
     "maxGroupSize": 15,
-    "difficulty": "medium"
+    "difficulty": "easy"
   },
   {
     "id": 11,
     "name": "The Park Camper",
     "duration": 10,
-    "maxGroupSize": 15,
+    "maxGroupSize": 20,
     "difficulty": "medium"
   }
 ]
