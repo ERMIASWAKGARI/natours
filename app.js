@@ -99,17 +99,36 @@ const updateTour = (req, res) => {
 
 const deleteTour = (req, res) => {
   const id = req.params.id * 1;
-  if (req.params.id * 1 > tours.length - 1) {
+
+  const index = tours.findIndex((el) => el.id === id);
+  console.log(index);
+
+  if (index === -1) {
     return res.status(404).json({
       status: 'fail',
       message: 'Invalid ID!',
     });
   }
 
-  res.status(200).json({
-    status: 'success',
-    data: null,
-  });
+  tours.splice(index, 1);
+
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours, null, 2),
+    (err) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'error',
+          message: 'Could not delete the tour',
+        });
+      }
+
+      res.status(204).json({
+        status: 'success',
+        data: null,
+      });
+    }
+  );
 };
 
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
